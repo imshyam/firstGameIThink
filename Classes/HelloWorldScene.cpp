@@ -1,7 +1,13 @@
 #include "HelloWorldScene.h"
+#include "SimpleAudioEngine.h"
+#include "GameScene.h"
+#include "LevelScene.h"
+#include "HighScene.h"
 
 USING_NS_CC;
-
+cocos2d::PhysicsWorld* m_world;
+void setPhyWorld(cocos2d::PhysicsWorld* world){m_world = world;}
+bool onContactBegin(cocos2d::PhysicsContact& contact);
 class DrawLine : public Layer{
     virtual void draw(Renderer *renderer, const kmMat4 &transform, bool transformUpdated){
     DrawPrimitives::drawLine( Point(0, 0), Point(100, 100) );
@@ -11,14 +17,14 @@ class DrawLine : public Layer{
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
-    auto scene = Scene::create();
-    
+    auto scene = Scene::createWithPhysics();
+    scene->getPhysicsWorld();
+    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     // 'layer' is an autorelease object
     auto layer = HelloWorld::create();
-
+    layer->SetPhysicsWorld( scene->getPhysicsWorld());
     // add layer as a child to scene
     scene->addChild(layer);
-
     // return the scene
     return scene;
 }
@@ -33,97 +39,51 @@ bool HelloWorld::init()
         return false;
     }
 
-    
+
+    //physics and screen boundary
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
-
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
-
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
-    
-    auto label = Label::createWithTTF("Score Player 1 : ", "fonts/Marker Felt.ttf", 40);
-    label->setColor(ccc3(0,0,0));
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/4,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    auto label1 = Label::createWithTTF("Score Player 2 : ", "fonts/Marker Felt.ttf", 40);
-    label1->setColor(ccc3(0,0,0));
-    // position the label on the center of the screen
-    label1->setPosition(Vec2(origin.x + (3*visibleSize.width/4),
-                            origin.y + visibleSize.height - label1->getContentSize().height));
-
-    // add the label as a child to this layer
-    this->addChild(label1, 1);
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("ball.png");
+    // add background
+    auto sprite = Sprite::create("main.jpg");
 
     // position the sprite on the center of the screen
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
-    auto moveBy = MoveBy::create(2, Vec2(visibleSize.width/2 + origin.x,origin.y));
-    sprite->runAction(moveBy);
-    
-    auto sprite1 = Sprite::create("platform.png");
 
-    // position the sprite on the center of the screen
-    sprite1->setPosition(Vec2(visibleSize.width/4 + origin.x, origin.y));
-    sprite1->setAnchorPoint(Vec2(0.5, 0));
-    // add the sprite as a child to this layer
-    this->addChild(sprite1, 0);
 
-    auto sprite2 = Sprite::create("platform.png");
-    sprite2->setAnchorPoint(Vec2(0.5, 0));
-    // position the sprite on the center of the screen
-    sprite2->setPosition(Vec2((3*visibleSize.width/4) + origin.x, + origin.y));
+    //menu
+    auto menu_item_1 = MenuItemImage::create("play.png", "playc.png", CC_CALLBACK_1(HelloWorld::GoToGamePlay, this));
+    auto menu_item_2 = MenuItemImage::create("hs.png", "hsc.png", CC_CALLBACK_1(HelloWorld::Highscores, this));
+    auto menu_item_3 = MenuItemImage::create("lev.png", "levc.png", CC_CALLBACK_1(HelloWorld::Levels, this));
 
-    // add the sprite as a child to this layer
-    this->addChild(sprite2, 0);
+    menu_item_1->setPosition(Point(visibleSize.width/2 , (visibleSize.height/4) * 3 ));
+    menu_item_2->setPosition(Point(visibleSize.width/2 , (visibleSize.height/4) * 2 ));
+    menu_item_3->setPosition(Point(visibleSize.width/2 , (visibleSize.height/4) * 1 ));
 
-    //drawing line
-    auto drawline = new DrawLine();
-    addChild(drawline);
+    auto menu = Menu::create(menu_item_1, menu_item_2, menu_item_3, NULL);
+    menu->setPosition(Point(0, 0));
+    this->addChild(menu);
+
+
 
     return true;
 }
 
+void HelloWorld::GoToGamePlay(cocos2d::Ref *pSender){
 
-void HelloWorld::menuCloseCallback(Ref* pSender)
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
-    return;
-#endif
+    auto scene = Game::createScene();
 
-    Director::getInstance()->end();
+    Director::getInstance()->replaceScene(scene);
+}
+void HelloWorld::Highscores(cocos2d::Ref *pSender){
+    auto scene = HS::createScene();
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+    Director::getInstance()->replaceScene(scene);
+}
+void HelloWorld::Levels(cocos2d::Ref *pSender){
+    auto scene = Level::createScene();
+
+    Director::getInstance()->replaceScene(scene);
 }

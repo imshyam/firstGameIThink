@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="weibosdk">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/cocos2d/plugin/plugins/weibo/proj.android/sdk/weibosdk.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

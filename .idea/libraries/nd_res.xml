@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="nd_res">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/cocos2d/plugin/plugins/nd91/proj.android/DependProject/res/raw/nd_res.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

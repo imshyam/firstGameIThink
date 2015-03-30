@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="pro">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/cocos2d/plugin/plugins/qh360/proj.android/ForAssets/pro.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

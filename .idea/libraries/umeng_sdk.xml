@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="umeng_sdk">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/cocos2d/plugin/plugins/umeng/proj.android/sdk/umeng_sdk.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
