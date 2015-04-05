@@ -67,7 +67,7 @@ bool HelloWorld::init()
     this->addChild(menu);
 
 
-
+    this->setKeypadEnabled(true);
     return true;
 }
 
@@ -75,15 +75,19 @@ void HelloWorld::GoToGamePlay(cocos2d::Ref *pSender){
 
     auto scene = Game::createScene();
 
-    Director::getInstance()->replaceScene(scene);
+    Director::getInstance()->pushScene(TransitionFade::create(1, scene, Color3B(0,255,255)));
 }
 void HelloWorld::Highscores(cocos2d::Ref *pSender){
     auto scene = HS::createScene();
 
-    Director::getInstance()->replaceScene(scene);
+    Director::getInstance()->pushScene(TransitionFade::create(0.5, scene, Color3B(0,255,255)));
 }
 void HelloWorld::Levels(cocos2d::Ref *pSender){
     auto scene = Level::createScene();
 
-    Director::getInstance()->replaceScene(scene);
+    Director::getInstance()->pushScene(TransitionFade::create(0.5, scene, Color3B(0,255,255)));
+}
+void HelloWorld::onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event )
+{
+    Director::getInstance()->end();
 }

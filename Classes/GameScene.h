@@ -14,14 +14,23 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(Game);
 
+    void onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event );
     //
     void GoToPauseScene(Ref *pSender);
     void GoToGameOverScene(Ref *pSender);
+
+    
+    //TouchEvents
+    bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
+    void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event);
+    void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event);
 
 private:
     cocos2d::PhysicsWorld *sceneWorld;
     
     void SetPhysicsWorld( cocos2d::PhysicsWorld *world ) { sceneWorld = world; };
+
+    bool onContactBegin( cocos2d::PhysicsContact &contact );
     
 };
 

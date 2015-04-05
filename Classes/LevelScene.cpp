@@ -26,7 +26,7 @@ bool Level::init()
     //////////////////////////////
     // 1. super init first
     //there are 4 fields .1 for opcity ,3 for color.
-    if ( !LayerColor::initWithColor(Color4B(0, 0, 0, 255) )) {
+    if ( !LayerColor::initWithColor(Color4B(255, 255, 255, 255) )) {
         return false;
     }
 
@@ -36,10 +36,15 @@ bool Level::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 
-    auto Label = Label::createWithTTF("Select Level", "fonts/Marker Felt.ttf", 24);
+    auto Label = Label::createWithTTF("Levels", "fonts/pixel font.ttf", 400);
+    Label->setColor(Color3B( 19, 79, 92));
     Label->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     this->addChild(Label);
 
-
+    this->setKeypadEnabled(true);
     return true;
+}
+void Level::onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event )
+{
+    Director::getInstance()->popScene();
 }

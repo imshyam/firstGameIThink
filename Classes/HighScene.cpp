@@ -1,4 +1,5 @@
 #include "HighScene.h"
+#include "HelloWorldScene.h"
 
 USING_NS_CC;
 cocos2d::PhysicsWorld* m_world;
@@ -25,7 +26,7 @@ bool HS::init()
     //////////////////////////////
     // 1. super init first
     //there are 4 fields .1 for opcity ,3 for color.
-    if ( !LayerColor::initWithColor(Color4B(0, 0, 0, 255) )) {
+    if ( !LayerColor::initWithColor(Color4B(255, 255, 255, 255) )) {
         return false;
     }
 
@@ -34,10 +35,22 @@ bool HS::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 
-    auto Label = Label::createWithTTF("High Score", "fonts/pixel font.ttf", 400);
-    Label->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-    this->addChild(Label);
+    auto sprite = Sprite::create("icon.png");
 
+    // position the sprite on the center of the screen
+    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    // add the sprite as a child to this layer
+    this->addChild(sprite, 0);
 
+    // auto Label = Label::createWithTTF("PONG", "fonts/pixel font.ttf", 400);
+    // Label->setColor(Color3B( 19, 79, 92));
+    // Label->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    // this->addChild(Label);
+
+    this->setKeypadEnabled(true);
     return true;
+}
+void HS::onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event )
+{
+    Director::getInstance()->popScene();
 }

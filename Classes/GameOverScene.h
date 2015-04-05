@@ -13,6 +13,8 @@ public:
         
     // implement the "static create()" method manually
     CREATE_FUNC(GameOver);
+    
+    void onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event );
 
 
 private:

@@ -1,5 +1,7 @@
 #include "PauseScene.h"
 #include "HelloWorldScene.h"
+#include "GameScene.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 cocos2d::PhysicsWorld* m_world;
@@ -35,6 +37,35 @@ bool Pause::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+    //menu
+    auto menu_item_1 = MenuItemImage::create("main.png", "mainc.png", CC_CALLBACK_1(Pause::ToMainMenu, this));
+    auto menu_item_2 = MenuItemImage::create("resu.png", "resuc.png", CC_CALLBACK_1(Pause::ToGame, this));
+    
+    menu_item_1->setPosition(Point(visibleSize.width/2 , (visibleSize.height/3)*2 ));
+    menu_item_2->setPosition(Point(visibleSize.width/2 , (visibleSize.height/3)*1 ));
+    
+    auto menu = Menu::create(menu_item_1, menu_item_2, NULL);
+    menu->setPosition(Point(0, 0));
+    this->addChild(menu);
 
+    this->setKeypadEnabled(true);
     return true;
+}
+void Pause::onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event )
+{    
+    CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+
+    Director::getInstance()->popScene();
+}
+void Pause::ToMainMenu(cocos2d::Ref *pSender){
+
+    auto scene = HelloWorld::createScene();
+
+    Director::getInstance()->replaceScene(scene);
+}
+void Pause::ToGame(cocos2d::Ref *pSender){
+
+    CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+
+    Director::getInstance()->popScene();
 }

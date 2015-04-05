@@ -14,6 +14,8 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 
+    void onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event );
+
     void GoToGamePlay (Ref *pSender);
     void Highscores (Ref *pSender);
     void Levels (Ref *pSender);

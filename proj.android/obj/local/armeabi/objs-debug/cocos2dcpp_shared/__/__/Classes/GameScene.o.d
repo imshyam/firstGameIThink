@@ -353,7 +353,8 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/GameScene.o: \
  jni/../../cocos2d/cocos/3d/../deprecated/CCDeprecated.h \
  jni/../../cocos2d/cocos/audio/android/../include/SimpleAudioEngine.h \
  jni/../../cocos2d/cocos/audio/android/../include/Export.h \
- jni/../../Classes/HelloWorldScene.h
+ jni/../../Classes/HelloWorldScene.h jni/../../Classes/PauseScene.h \
+ jni/../../Classes/GameOverScene.h
 
 jni/../../Classes/GameScene.h:
 
@@ -1064,3 +1065,7 @@ jni/../../cocos2d/cocos/audio/android/../include/SimpleAudioEngine.h:
 jni/../../cocos2d/cocos/audio/android/../include/Export.h:
 
 jni/../../Classes/HelloWorldScene.h:
+
+jni/../../Classes/PauseScene.h:
+
+jni/../../Classes/GameOverScene.h:
