@@ -26,13 +26,19 @@ UserPaddle::UserPaddle( cocos2d::Layer *layer )
 }
 void UserPaddle::moveLeft( )
 {
-    Body->setVelocity(Vec2(-500, 0));
+    user_paddle_velocity_x = user_paddle_velocity_min_x;
+
+    Body->setVelocity(Vec2(user_paddle_velocity_x, 0));
 }
 void UserPaddle::moveRight( )
 {
-    Body->setVelocity(Vec2(500, 0));
+    user_paddle_velocity_x = user_paddle_velocity_max_x;
+
+    Body->setVelocity(Vec2(user_paddle_velocity_x, 0));
 }
 void UserPaddle::Stop( )
 {
+    user_paddle_velocity_x = 0;
+    
     Body->setVelocity(Vec2(0, 0));
 }

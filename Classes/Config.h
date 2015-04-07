@@ -20,13 +20,17 @@ bool notTouchedLeft = true;
 bool notTouchedRight  = true;
 
 int ball_velocity_x = 500;
+int ball_velocity_y = 500;
+int ball_velocity_min_x = -1000;
 int ball_velocity_max_x = 1000;
-int ball_velocity_Y = 500;
+
 int cpu_paddle_velocity_x = 500;
-int cpu_paddle_max_velocity_x = 700;
 int cpu_paddle_min_velocity_x = -700;
-int user_paddle_max_velocity_x = 700;
-int user_paddle_min_velocity_x = -700;
+int cpu_paddle_max_velocity_x = 700;
+
+int user_paddle_velocity_x ;
+int user_paddle_velocity_min_x = -800;
+int user_paddle_velocity_max_x = 800;
 
 // #define BIRD_FALLING_SPEED 0.0025
 // #define BIRD_FLYING_SPEED 0.00375
