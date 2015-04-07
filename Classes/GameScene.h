@@ -2,6 +2,10 @@
 #define __GAME_SCENE_H__
 
 #include "cocos2d.h"
+#include "Ball.h"
+#include "UserPaddle.h"
+#include "CpuPaddle.h"
+
 
 class Game : public cocos2d::LayerColor
 {
@@ -31,6 +35,10 @@ private:
     void SetPhysicsWorld( cocos2d::PhysicsWorld *world ) { sceneWorld = world; };
 
     bool onContactBegin( cocos2d::PhysicsContact &contact );
+
+    Ball *ball;
+    UserPaddle *userPaddle;
+    CpuPaddle *cpuPaddle;
     
 };
 

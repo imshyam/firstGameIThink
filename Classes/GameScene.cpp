@@ -3,10 +3,11 @@
 #include "HelloWorldScene.h"
 #include "PauseScene.h"
 #include "GameOverScene.h"
+#include "Config.h"
 
 USING_NS_CC;
 cocos2d::PhysicsWorld* m_world;
-void setPhyWorld(cocos2d::PhysicsWorld* world){m_world = world;}
+void setPhyWorld(cocos2d::PhysicsWorld* world){m_world = world;}    
 
 Scene* Game::createScene()
 {
@@ -40,7 +41,7 @@ bool Game::init()
 
     auto edgeBody = PhysicsBody::createEdgeBox( visibleSize, PhysicsMaterial(0.0f, 1.0f, 0.0f), 3 );
     //collision
-    edgeBody->setCollisionBitmask(1);
+    edgeBody->setCollisionBitmask(GROUND_COLLISION_BITMASK);
     edgeBody->setContactTestBitmask(true);
 
     auto edgeNode = Node::create();
@@ -54,64 +55,11 @@ bool Game::init()
     
     CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("theme.mp3", true);
 
+    userPaddle = new UserPaddle ( this );
 
-    //sprites
+    cpuPaddle = new CpuPaddle ( this );
 
-    auto sprite = Sprite::create("platform.png");
-
-    // position the sprite 
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x,(visibleSize.height*1)/20 + origin.y));
-    sprite->setAnchorPoint(Point(0.5, 0));
-    //physics body
-    auto physicsBody = PhysicsBody::createBox(Size(sprite->getContentSize().width ,
-                        sprite->getContentSize().height ),
-                        PhysicsMaterial(0, 1, 0));
-    physicsBody->setDynamic(false);
-    physicsBody->setGravityEnable(false);
-    //sprite to physics body
-    sprite->setPhysicsBody(physicsBody);
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
-
-    auto sprite1 = Sprite::create("platformu.png");
-
-    // position the sprite
-    sprite1->setPosition(Vec2(visibleSize.width/2 + origin.x, (visibleSize.height*19)/20 + origin.y));
-    sprite1->setAnchorPoint(Point(0.5, 1));
-    //physics body
-    auto physicsBody1 = PhysicsBody::createBox(Size(sprite1->getContentSize().width ,
-                        sprite1->getContentSize().height ),
-                        PhysicsMaterial(1.0f, 1, 0));
-    physicsBody1->setGravityEnable(false);
-    physicsBody->setDynamic(false);
-    //collision
-    physicsBody1->setCollisionBitmask(3);
-    physicsBody1->setContactTestBitmask(true);
-    physicsBody1->setVelocity(Vec2(500, 0));
-    //sprite to physics body
-    sprite1->setPhysicsBody(physicsBody1);
-    // add the sprite as a child to this layer
-    this->addChild(sprite1, 0);
-
-
-
-    auto sprite2 = Sprite::create("ball.png");
-
-    // position the sprite
-    sprite2->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    //physics body
-    auto physicsBody2 = PhysicsBody::createCircle(sprite2->getContentSize().width /2,
-                        PhysicsMaterial(0, 1, 0));
-    physicsBody2->setVelocity(Vec2(500, 500));
-    physicsBody2->setGravityEnable(false);
-    //collision
-    physicsBody2->setCollisionBitmask(2);
-    physicsBody2->setContactTestBitmask(true);
-    //sprite to physics body
-    sprite2->setPhysicsBody(physicsBody2);
-    // add the sprite as a child to this layer
-    this->addChild(sprite2, 0);
+    ball = new Ball( this );
 
     //bound walls
     auto sprite3 = Sprite::create("bound.png");
@@ -145,7 +93,7 @@ bool Game::init()
     physicsBody4->setDynamic(false);
     physicsBody4->setGravityEnable(false);
     //collision
-    physicsBody4->setCollisionBitmask(4);
+    physicsBody4->setCollisionBitmask(6);
     physicsBody4->setContactTestBitmask(true);
     //sprite to physics body
     sprite4->setPhysicsBody(physicsBody4);
@@ -189,14 +137,32 @@ void Game::onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 }
 
 bool Game::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event){
-    CCLOG("Touched at x = %f , y = %f", touch->getLocation().x, touch->getLocation().y);
-    return 0;
+    if( touch->getLocation().x<=900 && notTouchedLeft ){
+        userPaddle->moveLeft();
+        notTouchedRight = true;
+        CCLOG("Left");
+    }
+    else if( touch->getLocation().x>900 && notTouchedRight ){
+        userPaddle->moveRight();
+        notTouchedLeft = true;
+        CCLOG("Right");
+    }
+    return true;
 }
 void Game::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event){
-    CCLOG("Touch Moved at x = %f , y = %f", touch->getLocation().x, touch->getLocation().y);
+    if( touch->getLocation().x<=900 && notTouchedLeft ){
+        userPaddle->moveLeft();
+        notTouchedRight = true;
+        CCLOG("Left");
+    }
+    else if( touch->getLocation().x>900 && notTouchedRight ){
+        userPaddle->moveRight();
+        notTouchedLeft = true;
+        CCLOG("Right");
+    }
 }
 void Game::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event){
-    CCLOG("Touch Ended at x = %f , y = %f", touch->getLocation().x, touch->getLocation().y);
+    userPaddle->Stop( );
 }
 bool Game::onContactBegin(cocos2d::PhysicsContact &contact)
 {
@@ -204,7 +170,7 @@ bool Game::onContactBegin(cocos2d::PhysicsContact &contact)
     PhysicsBody *b = contact.getShapeB()->getBody();
     
     // check if the bodies have collided
-    if ( ( 1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask() ) || ( 2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask() ) )
+    if ( ( BALL_COLLISION_BITMASK == a->getCollisionBitmask( ) && GROUND_COLLISION_BITMASK == b->getCollisionBitmask() ) || ( BALL_COLLISION_BITMASK == b->getCollisionBitmask( ) && GROUND_COLLISION_BITMASK == a->getCollisionBitmask() ) )
     {
         CCLOG("wall and ball");
         // auto scene = GameOver::createScene();
@@ -212,23 +178,54 @@ bool Game::onContactBegin(cocos2d::PhysicsContact &contact)
         // CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
         return true;
     }
-    else if ( ( 3 == a->getCollisionBitmask() && 4 == b->getCollisionBitmask() ) || ( 4 == a->getCollisionBitmask() && 3 == b->getCollisionBitmask() ) )
+    else if ( ( CPU_P_COLLISION_BITMASK  == a->getCollisionBitmask() && 6 == b->getCollisionBitmask() ) || ( 6 == a->getCollisionBitmask() && CPU_P_COLLISION_BITMASK == b->getCollisionBitmask() ) )
     {
-        CCLOG("platform and boundary Right");
+        CCLOG("cpuPaddle and boundary Right");
         a->setVelocity(Vec2(-500, 0));
         b->setVelocity(Vec2(-500, 0));
         return false;
     }
-    else if ( ( 3 == a->getCollisionBitmask() && 5 == b->getCollisionBitmask() ) || ( 5 == a->getCollisionBitmask() && 3 == b->getCollisionBitmask() ) )
+    else if ( ( CPU_P_COLLISION_BITMASK == a->getCollisionBitmask() && 5 == b->getCollisionBitmask() ) || ( 5 == a->getCollisionBitmask() && CPU_P_COLLISION_BITMASK == b->getCollisionBitmask() ) )
     {
-        CCLOG("platform and boundary Left");
+        CCLOG("cpuPaddle and boundary Left");
         a->setVelocity(Vec2(500, 0));
         b->setVelocity(Vec2(500, 0));
         return false;
-    }
-    else if ( ( 3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask() ) || ( 2 == a->getCollisionBitmask() && 3 == b->getCollisionBitmask() ) )
+    }else if ( ( USER_P_COLLISION_BITMASK  == a->getCollisionBitmask() && 6 == b->getCollisionBitmask() ) || ( 6 == a->getCollisionBitmask() && USER_P_COLLISION_BITMASK == b->getCollisionBitmask() ) )
     {
-        CCLOG("platform and ball");
+        CCLOG("UserPaddle and boundary Right");
+        userPaddle->Stop( );
+        notTouchedRight = false;
+        return false;
+    }
+    else if ( ( USER_P_COLLISION_BITMASK == a->getCollisionBitmask() && 5 == b->getCollisionBitmask() ) || ( 5 == a->getCollisionBitmask() && USER_P_COLLISION_BITMASK == b->getCollisionBitmask() ) )
+    {
+        CCLOG("UserPaddle and boundary Left");
+        userPaddle->Stop( );
+        notTouchedLeft = false;
+        return false;
+    }
+    else if ( ( BALL_COLLISION_BITMASK  == a->getCollisionBitmask() && 6 == b->getCollisionBitmask() ) || ( 6 == a->getCollisionBitmask() && BALL_COLLISION_BITMASK == b->getCollisionBitmask() ) )
+    {
+        CCLOG("ball and boundary Right");
+        return true;
+    }
+    else if ( ( BALL_COLLISION_BITMASK  == a->getCollisionBitmask() && 5 == b->getCollisionBitmask() ) || ( 5 == a->getCollisionBitmask() && BALL_COLLISION_BITMASK == b->getCollisionBitmask() ) )
+    {
+        CCLOG("ball and boundary Left");
+        return true;
+    }
+    else if ( ( CPU_P_COLLISION_BITMASK == a->getCollisionBitmask() && BALL_COLLISION_BITMASK == b->getCollisionBitmask() ) || ( BALL_COLLISION_BITMASK == a->getCollisionBitmask() && CPU_P_COLLISION_BITMASK == b->getCollisionBitmask() ) )
+    {
+        CCLOG("cpuPaddle and ball");
+        // auto scene = GameOver::createScene();
+        // Director::getInstance()->pushScene(scene);
+        // CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+        return true;
+    }
+    else if ( ( USER_P_COLLISION_BITMASK == a->getCollisionBitmask() && BALL_COLLISION_BITMASK == b->getCollisionBitmask() ) || ( BALL_COLLISION_BITMASK == a->getCollisionBitmask() && USER_P_COLLISION_BITMASK == b->getCollisionBitmask() ) )
+    {
+        CCLOG("userPaddle and ball");
         // auto scene = GameOver::createScene();
         // Director::getInstance()->pushScene(scene);
         // CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
