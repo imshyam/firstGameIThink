@@ -161,15 +161,6 @@ bool Game::init()
     this->setKeypadEnabled(true);
     return true;
 }
-
-void Game::GoToPauseScene(cocos2d::Ref *pSender)
-{
-
-}
-void Game::GoToGameOverScene(cocos2d::Ref *pSender)
-{
-
-}
 void Game::onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event )
 {
     auto scene = Pause::createScene();
@@ -211,17 +202,25 @@ bool Game::onContactBegin(cocos2d::PhysicsContact &contact)
     PhysicsBody *b = contact.getShapeB()->getBody();
     
     // check if the bodies have collided
+    //cpu lost
     if ( ( BALL_COLLISION_BITMASK == a->getCollisionBitmask( ) && 7 == b->getCollisionBitmask() ) || ( BALL_COLLISION_BITMASK == b->getCollisionBitmask( ) && 7 == a->getCollisionBitmask() ) )
     {
         CCLOG("CPU Lost");
+        //reset value
+        ball_velocity_x = 800;
+        ball_velocity_y = 700;
         auto scene = GameOver::createScene();
         Director::getInstance()->pushScene(scene);
         CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
         return true;
     }
+    //user lost
     else if ( ( BALL_COLLISION_BITMASK == a->getCollisionBitmask( ) && 8 == b->getCollisionBitmask() ) || ( BALL_COLLISION_BITMASK == b->getCollisionBitmask( ) && 8 == a->getCollisionBitmask() ) )
     {
         CCLOG("User Lost");
+        //reset value
+        ball_velocity_x = 800;
+        ball_velocity_y = 700;
         auto scene = GameOver::createScene();
         Director::getInstance()->pushScene(scene);
         CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
@@ -255,16 +254,16 @@ bool Game::onContactBegin(cocos2d::PhysicsContact &contact)
     else if ( ( BALL_COLLISION_BITMASK  == a->getCollisionBitmask() && 6 == b->getCollisionBitmask() ) || ( 6 == a->getCollisionBitmask() && BALL_COLLISION_BITMASK == b->getCollisionBitmask() ) )
     {
         // CCLOG("ball and boundary Right");
-        ball_velocity_x = -ball_velocity_x;
+        ball->leftRight();
         cpuPaddle->changeVelocity( );
-        return true;
+        return false;
     }
     else if ( ( BALL_COLLISION_BITMASK  == a->getCollisionBitmask() && 5 == b->getCollisionBitmask() ) || ( 5 == a->getCollisionBitmask() && BALL_COLLISION_BITMASK == b->getCollisionBitmask() ) )
     {
         // CCLOG("ball and boundary Left");
-        ball_velocity_x = -ball_velocity_x;
+        ball->leftRight();
         cpuPaddle->changeVelocity( );
-        return true;
+        return false;
     }
     else if ( ( CPU_P_COLLISION_BITMASK == a->getCollisionBitmask() && BALL_COLLISION_BITMASK == b->getCollisionBitmask() ) || ( BALL_COLLISION_BITMASK == a->getCollisionBitmask() && CPU_P_COLLISION_BITMASK == b->getCollisionBitmask() ) )
     {
@@ -275,7 +274,6 @@ bool Game::onContactBegin(cocos2d::PhysicsContact &contact)
     else if ( ( USER_P_COLLISION_BITMASK == a->getCollisionBitmask() && BALL_COLLISION_BITMASK == b->getCollisionBitmask() ) || ( BALL_COLLISION_BITMASK == a->getCollisionBitmask() && USER_P_COLLISION_BITMASK == b->getCollisionBitmask() ) )
     {
         // CCLOG("userPaddle and ball");
-        ball->userPaddleResponce( );
         ball->changeVelocity( );
         cpuPaddle->changeVelocity( );
         return false;

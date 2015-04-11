@@ -75,7 +75,7 @@ void HelloWorld::GoToGamePlay(cocos2d::Ref *pSender){
 
     auto scene = Game::createScene();
 
-    Director::getInstance()->pushScene(TransitionFade::create(1, scene, Color3B(0,255,255)));
+    Director::getInstance()->pushScene(TransitionFade::create(0.5, scene, Color3B(0,255,255)));
 }
 void HelloWorld::Highscores(cocos2d::Ref *pSender){
     auto scene = HS::createScene();

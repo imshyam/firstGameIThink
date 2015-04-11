@@ -1,5 +1,6 @@
 #include "GameOverScene.h"
 #include "GameScene.h"
+#include "HelloWorldScene.h"
 
 USING_NS_CC;
 cocos2d::PhysicsWorld* m_world;
@@ -35,16 +36,35 @@ bool GameOver::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-     auto Label = Label::createWithTTF("GameOver", "fonts/pixel font.ttf", 400);
-    Label->setColor(Color3B( 19, 79, 92));
-    Label->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-    this->addChild(Label);
+    //menu
+    auto menu_item_1 = MenuItemImage::create("main.png", "mainc.png", CC_CALLBACK_1(GameOver::GoToHome, this));
+    auto menu_item_2 = MenuItemImage::create("retry.png", "retryc.png", CC_CALLBACK_1(GameOver::GoToGame, this));
 
+    menu_item_1->setPosition(Point(visibleSize.width/2 , (visibleSize.height/4) * 3 ));
+    menu_item_2->setPosition(Point(visibleSize.width/2 , (visibleSize.height/4) * 1 ));
+
+    auto menu = Menu::create(menu_item_1, menu_item_2, NULL);
+    menu->setPosition(Point(0, 0));
+    this->addChild(menu);
 
     this->setKeypadEnabled(true);
     return true;
 }
+void GameOver::GoToGame(cocos2d::Ref *pSender){
+
+    auto scene = Game::createScene();
+
+    Director::getInstance()->pushScene(TransitionFade::create(0.5, scene, Color3B(0,255,255)));
+}
+void GameOver::GoToHome(cocos2d::Ref *pSender){
+
+    auto scene = HelloWorld::createScene();
+
+    Director::getInstance()->pushScene(TransitionFade::create(0.5, scene, Color3B(0,255,255)));
+}
 void GameOver::onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event )
 {
-    Director::getInstance()->end();
+    auto scene = HelloWorld::createScene();
+
+    Director::getInstance()->pushScene(TransitionFade::create(0.5, scene, Color3B(0,255,255)));
 }

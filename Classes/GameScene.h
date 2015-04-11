@@ -19,9 +19,7 @@ public:
     CREATE_FUNC(Game);
 
     void onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event );
-    //
-    void GoToPauseScene(Ref *pSender);
-    void GoToGameOverScene(Ref *pSender);
+    
 
     
     //TouchEvents

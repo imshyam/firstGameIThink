@@ -11,6 +11,7 @@ public:
     void cpuPaddleResponce( );
     void userPaddleResponce( );
     void changeVelocity( );
+    void leftRight( );
 private:
     cocos2d::Size visibleSize;
     cocos2d::Vec2 origin;

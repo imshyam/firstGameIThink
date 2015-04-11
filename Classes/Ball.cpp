@@ -24,24 +24,26 @@ Ball::Ball( cocos2d::Layer *layer )
 
 void Ball::cpuPaddleResponce( )
 {
-    Body->setVelocity(Vec2(ball_velocity_x, -ball_velocity_y));
-}
-void Ball::userPaddleResponce( )
-{
+    ball_velocity_y = -ball_velocity_y;
     Body->setVelocity(Vec2(ball_velocity_x, ball_velocity_y));
 }
 void Ball::changeVelocity( )
 {
-    ball_velocity_x += user_paddle_velocity_x/8;
-    CCLOG("ball velocity : %d",ball_velocity_x);
-    CCLOG("user paddle velocity : %d",user_paddle_velocity_x);
+    ball_velocity_y = -ball_velocity_y;
+    CCLOG("pre ball velocity : %d",ball_velocity_x);
+    ball_velocity_x += user_paddle_velocity_x/10;
+    CCLOG("middle ball velocity : %d",ball_velocity_x);
     if ( ball_velocity_x <= ball_velocity_min_x ){
-        Body->setVelocity( Vec2( ball_velocity_min_x, ball_velocity_y ) );
+        ball_velocity_x = ball_velocity_min_x;
     }
-    else if ( ball_velocity_x > cpu_paddle_min_velocity_x && ball_velocity_x <= ball_velocity_max_x ){
-        Body->setVelocity( Vec2( ball_velocity_x, ball_velocity_y ) );
+    else if(ball_velocity_x >= ball_velocity_max_x){
+        ball_velocity_x = ball_velocity_max_x;
     }
-    else{
-        Body->setVelocity( Vec2( ball_velocity_max_x, ball_velocity_y ) );
-    }
+    CCLOG("post ball velocity : %d",ball_velocity_x);
+    Body->setVelocity( Vec2( ball_velocity_x, ball_velocity_y ) );
+}
+void Ball::leftRight( )
+{
+    ball_velocity_x = -ball_velocity_x;
+    Body->setVelocity( Vec2( ball_velocity_x, ball_velocity_y ) );
 }

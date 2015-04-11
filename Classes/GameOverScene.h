@@ -16,6 +16,8 @@ public:
     
     void onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event );
 
+    void GoToGame (Ref *pSender);
+    void GoToHome (Ref *pSender);
 
 private:
     cocos2d::PhysicsWorld *sceneWorld;
