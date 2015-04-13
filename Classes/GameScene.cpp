@@ -35,7 +35,7 @@ bool Game::init()
     }
 
 
-    Size visibleSize = Director::getInstance()->getVisibleSize();
+    visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     //physics and screen boundary
 
@@ -62,7 +62,7 @@ bool Game::init()
     ball = new Ball( this );
     //Game ending Sprites
 
-    //upper
+    //upper boundary
     auto sprite1 = Sprite::create("loser.png");
     sprite1->setAnchorPoint(Point(0.5, 1));
     // position the sprite
@@ -82,7 +82,7 @@ bool Game::init()
     // add the sprite as a child to this layer
     this->addChild(sprite1, 0);
 
-    //lower
+    //lower boundary
     auto sprite2 = Sprite::create("loser.png");
     sprite2->setAnchorPoint(Point(0.5, 0));
     // position the sprite
@@ -141,7 +141,30 @@ bool Game::init()
     // add the sprite as a child to this layer
     this->addChild(sprite4, 0);
 
+    //Show score
+    scoreCpu=0;
+    scoreUser=0;
 
+    __String *tempCpu = __String::createWithFormat( "%i", scoreCpu );
+    __String *tempUser = __String::createWithFormat( "%i", scoreUser );
+
+    scoreLabelCpu = Label::createWithTTF(tempCpu->getCString(), "fonts/pixel font.ttf", 400);
+    scoreLabelCpu->setColor(Color3B( 19, 79, 92));
+    scoreLabelCpu->setPosition(Vec2(visibleSize.width*.10 + origin.x, visibleSize.height*.90 + origin.y));
+    this->addChild(scoreLabelCpu,1000);
+
+    scoreLabelUser = Label::createWithTTF(tempUser->getCString(), "fonts/pixel font.ttf", 400);
+    scoreLabelUser->setColor(Color3B( 19, 79, 92));
+    scoreLabelUser->setPosition(Vec2(visibleSize.width*.10 + origin.x, visibleSize.height*.10 + origin.y));
+    this->addChild(scoreLabelUser,1000);
+
+    //pause button
+    auto menu_item_1 = MenuItemImage::create("pause.png", "pause.png", CC_CALLBACK_1(Game::Pause, this));
+    menu_item_1->setPosition(Point(visibleSize.width*.90 , (visibleSize.height*.90) ));
+
+    auto menu = Menu::create(menu_item_1, NULL);
+    menu->setPosition(Point(0, 0));
+    this->addChild(menu,1000);
 
     //TouchEvents Listener
     auto listener = EventListenerTouchOneByOne::create();
@@ -167,14 +190,25 @@ void Game::onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
     Director::getInstance()->pushScene(scene);
     CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 }
+void Game::Pause( cocos2d::Ref *pSender )
+{
+    auto scene = Pause::createScene();
+    Director::getInstance()->pushScene(scene);
+    CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+}
 
 bool Game::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event){
-    if( touch->getLocation().x<=900 && notTouchedLeft ){
+    if( gamePaused ){
+        ball->startAgain();
+        cpuPaddle->startAgain();
+        gamePaused = false;
+    }
+    if( touch->getLocation().x<=visibleSize.width/2 && notTouchedLeft ){
         userPaddle->moveLeft();
         notTouchedRight = true;
         // CCLOG("Left");
     }
-    else if( touch->getLocation().x>900 && notTouchedRight ){
+    else if( touch->getLocation().x>visibleSize.width/2 && notTouchedRight ){
         userPaddle->moveRight();
         notTouchedLeft = true;
         // CCLOG("Right");
@@ -182,12 +216,12 @@ bool Game::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event){
     return true;
 }
 void Game::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event){
-    if( touch->getLocation().x<=900 && notTouchedLeft ){
+    if( touch->getLocation().x<=visibleSize.width/2 && notTouchedLeft ){
         userPaddle->moveLeft();
         notTouchedRight = true;
         // CCLOG("Left");
     }
-    else if( touch->getLocation().x>900 && notTouchedRight ){
+    else if( touch->getLocation().x>visibleSize.width/2 && notTouchedRight ){
         userPaddle->moveRight();
         notTouchedLeft = true;
         // CCLOG("Right");
@@ -206,25 +240,50 @@ bool Game::onContactBegin(cocos2d::PhysicsContact &contact)
     if ( ( BALL_COLLISION_BITMASK == a->getCollisionBitmask( ) && 7 == b->getCollisionBitmask() ) || ( BALL_COLLISION_BITMASK == b->getCollisionBitmask( ) && 7 == a->getCollisionBitmask() ) )
     {
         CCLOG("CPU Lost");
+        scoreUser++;
+        __String *tempUser = __String::createWithFormat( "%i", scoreUser );
+        scoreLabelUser->setString(tempUser->getCString());
         //reset value
-        ball_velocity_x = 800;
-        ball_velocity_y = 700;
-        auto scene = GameOver::createScene();
-        Director::getInstance()->pushScene(scene);
-        CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-        return true;
+        gamePaused = true;
+        ball_velocity_x = ball_velocity_x_initial;
+        ball_velocity_y = ball_velocity_y_initial;
+        if(scoreUser == 5){
+            userWon=true;
+            gamePaused = false;
+            auto scene = GameOver::createScene();
+            Director::getInstance()->pushScene(scene);
+            CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+            return true;
+        }
+        //again
+        else {
+            ball->again();
+            cpuPaddle->again();
+        }
     }
     //user lost
     else if ( ( BALL_COLLISION_BITMASK == a->getCollisionBitmask( ) && 8 == b->getCollisionBitmask() ) || ( BALL_COLLISION_BITMASK == b->getCollisionBitmask( ) && 8 == a->getCollisionBitmask() ) )
     {
         CCLOG("User Lost");
+        scoreCpu++;
+        __String *tempCpu = __String::createWithFormat( "%i", scoreCpu );
+        scoreLabelCpu->setString(tempCpu->getCString());
         //reset value
-        ball_velocity_x = 800;
-        ball_velocity_y = 700;
-        auto scene = GameOver::createScene();
-        Director::getInstance()->pushScene(scene);
-        CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-        return true;
+        gamePaused = true;
+        ball_velocity_x = ball_velocity_x_initial;
+        ball_velocity_y = ball_velocity_y_initial;
+        if(scoreCpu == 5){
+            gamePaused = false;
+            auto scene = GameOver::createScene();
+            Director::getInstance()->pushScene(scene);
+            CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+            return true;
+        }
+        //again
+        else {
+            ball->again();
+            cpuPaddle->again();
+        }
     }
     else if ( ( CPU_P_COLLISION_BITMASK  == a->getCollisionBitmask() && 6 == b->getCollisionBitmask() ) || ( 6 == a->getCollisionBitmask() && CPU_P_COLLISION_BITMASK == b->getCollisionBitmask() ) )
     {

@@ -351,7 +351,9 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/LevelScene.o: \
  jni/../../cocos2d/cocos/3d/../deprecated/CCString.h \
  jni/../../cocos2d/cocos/3d/../deprecated/CCNotificationCenter.h \
  jni/../../cocos2d/cocos/3d/../deprecated/CCDeprecated.h \
- jni/../../Classes/HelloWorldScene.h
+ jni/../../Classes/Config.h jni/../../Classes/HelloWorldScene.h \
+ jni/../../Classes/GameScene.h jni/../../Classes/Ball.h \
+ jni/../../Classes/UserPaddle.h jni/../../Classes/CpuPaddle.h
 
 jni/../../Classes/LevelScene.h:
 
@@ -1057,4 +1059,14 @@ jni/../../cocos2d/cocos/3d/../deprecated/CCNotificationCenter.h:
 
 jni/../../cocos2d/cocos/3d/../deprecated/CCDeprecated.h:
 
+jni/../../Classes/Config.h:
+
 jni/../../Classes/HelloWorldScene.h:
+
+jni/../../Classes/GameScene.h:
+
+jni/../../Classes/Ball.h:
+
+jni/../../Classes/UserPaddle.h:
+
+jni/../../Classes/CpuPaddle.h:

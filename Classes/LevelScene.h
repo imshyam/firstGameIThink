@@ -2,6 +2,7 @@
 #define __LEVEL_SCENE_H__
 
 #include "cocos2d.h"
+#include "Config.h"
 
 class Level : public cocos2d::LayerColor
 {
@@ -13,6 +14,11 @@ public:
         
     // implement the "static create()" method manually
     CREATE_FUNC(Level);
+
+    void GoToGamePlayBe (Ref *pSender);
+    void GoToGamePlayInt (Ref *pSender);
+    void GoToGamePlayPro (Ref *pSender);
+
 
     void onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event );
 

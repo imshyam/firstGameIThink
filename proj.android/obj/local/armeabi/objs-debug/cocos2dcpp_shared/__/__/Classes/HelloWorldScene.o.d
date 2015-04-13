@@ -356,7 +356,8 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/HelloWorldScene.o: 
  jni/../../cocos2d/cocos/audio/android/../include/Export.h \
  jni/../../Classes/GameScene.h jni/../../Classes/Ball.h \
  jni/../../Classes/UserPaddle.h jni/../../Classes/CpuPaddle.h \
- jni/../../Classes/LevelScene.h jni/../../Classes/HighScene.h
+ jni/../../Classes/LevelScene.h jni/../../Classes/Config.h \
+ jni/../../Classes/HighScene.h
 
 jni/../../Classes/HelloWorldScene.h:
 
@@ -1075,5 +1076,7 @@ jni/../../Classes/UserPaddle.h:
 jni/../../Classes/CpuPaddle.h:
 
 jni/../../Classes/LevelScene.h:
+
+jni/../../Classes/Config.h:
 
 jni/../../Classes/HighScene.h:

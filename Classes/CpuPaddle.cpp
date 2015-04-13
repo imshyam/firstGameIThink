@@ -42,3 +42,12 @@ void CpuPaddle::Stop( )
 {
     Body->setVelocity( Vec2( 0, 0 ) );
 }
+void CpuPaddle::again( ){
+    Body->setVelocity(Vec2(0,0));
+    auto moveTo = MoveTo::create(0, Vec2(visibleSize.width/2 + origin.x, (visibleSize.height*19)/20 + origin.y) );
+    cpuPaddle->runAction(moveTo);
+}
+void CpuPaddle::startAgain( )
+{
+    Body->setVelocity(Vec2(ball_velocity_x, 0));
+}

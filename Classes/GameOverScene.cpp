@@ -1,6 +1,8 @@
 #include "GameOverScene.h"
 #include "GameScene.h"
 #include "HelloWorldScene.h"
+#include "Config.h"
+#include "HighScene.h"
 
 USING_NS_CC;
 cocos2d::PhysicsWorld* m_world;
@@ -39,13 +41,25 @@ bool GameOver::init()
     //menu
     auto menu_item_1 = MenuItemImage::create("main.png", "mainc.png", CC_CALLBACK_1(GameOver::GoToHome, this));
     auto menu_item_2 = MenuItemImage::create("retry.png", "retryc.png", CC_CALLBACK_1(GameOver::GoToGame, this));
+    auto menu_item_3 = MenuItemImage::create("hs.png", "hsc.png", CC_CALLBACK_1(GameOver::GoToHS, this));
 
     menu_item_1->setPosition(Point(visibleSize.width/2 , (visibleSize.height/4) * 3 ));
+    menu_item_3->setPosition(Point(visibleSize.width/2 , (visibleSize.height/4) * 2 ));
     menu_item_2->setPosition(Point(visibleSize.width/2 , (visibleSize.height/4) * 1 ));
 
-    auto menu = Menu::create(menu_item_1, menu_item_2, NULL);
+    auto menu = Menu::create(menu_item_1, menu_item_2, menu_item_3, NULL);
     menu->setPosition(Point(0, 0));
     this->addChild(menu);
+
+    auto winner = Label::createWithTTF("", "fonts/arial.ttf", 200);
+    winner->setColor(Color3B( 255, 255, 255));
+    winner->setPosition(Vec2(visibleSize.width*.50 + origin.x, visibleSize.height*.90 + origin.y));
+    this->addChild(winner,1000);
+    if(userWon){
+        winner->setString("You Won");
+    }
+    else
+        winner->setString("CPU Won");
 
     this->setKeypadEnabled(true);
     return true;
@@ -59,6 +73,11 @@ void GameOver::GoToGame(cocos2d::Ref *pSender){
 void GameOver::GoToHome(cocos2d::Ref *pSender){
 
     auto scene = HelloWorld::createScene();
+
+    Director::getInstance()->pushScene(TransitionFade::create(0.5, scene, Color3B(0,255,255)));
+}
+void GameOver::GoToHS(cocos2d::Ref *pSender){
+    auto scene = HS::createScene();
 
     Director::getInstance()->pushScene(TransitionFade::create(0.5, scene, Color3B(0,255,255)));
 }

@@ -1,15 +1,6 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-// #define DISPLAY_TIME_SPLASH_SCENE 2
-// #define TRANSITION_TIME 0.5
-// #define PIPE_SPAWN_FREQUENCY 0.005
-
-// #define PIPE_GAP 10
-// #define UPPER_SCREEN_PIPE_THRESHOLD 0.65
-// #define LOWER_SCREEN_PIPE_THRESHOLD 0.35
-
-// #define PIPE_MOVEMENT_SPEED 0.01
 
 #define BALL_COLLISION_BITMASK 0x000001
 #define GROUND_COLLISION_BITMASK 0x000002
@@ -19,8 +10,10 @@
 bool notTouchedLeft = true;
 bool notTouchedRight  = true;
 
-int ball_velocity_x = 800;
-int ball_velocity_y = 700;
+int ball_velocity_x_initial = 800;
+int ball_velocity_y_initial = 700;
+int ball_velocity_x = ball_velocity_x_initial;
+int ball_velocity_y = ball_velocity_y_initial;
 int ball_velocity_min_x = -1700;
 int ball_velocity_max_x = 1700;
 
@@ -31,6 +24,9 @@ int cpu_paddle_max_velocity_x = 1000;
 int user_paddle_velocity_x ;
 int user_paddle_velocity_min_x = -1000;
 int user_paddle_velocity_max_x = 1000;
+
+bool userWon = false;
+bool gamePaused = false;
 
 // #define BIRD_FALLING_SPEED 0.0025
 // #define BIRD_FLYING_SPEED 0.00375

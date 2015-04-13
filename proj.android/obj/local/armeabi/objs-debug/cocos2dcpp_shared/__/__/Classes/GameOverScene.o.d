@@ -353,7 +353,8 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/GameOverScene.o: \
  jni/../../cocos2d/cocos/3d/../deprecated/CCDeprecated.h \
  jni/../../Classes/GameScene.h jni/../../Classes/Ball.h \
  jni/../../Classes/UserPaddle.h jni/../../Classes/CpuPaddle.h \
- jni/../../Classes/HelloWorldScene.h
+ jni/../../Classes/HelloWorldScene.h jni/../../Classes/Config.h \
+ jni/../../Classes/HighScene.h
 
 jni/../../Classes/GameOverScene.h:
 
@@ -1068,3 +1069,7 @@ jni/../../Classes/UserPaddle.h:
 jni/../../Classes/CpuPaddle.h:
 
 jni/../../Classes/HelloWorldScene.h:
+
+jni/../../Classes/Config.h:
+
+jni/../../Classes/HighScene.h:

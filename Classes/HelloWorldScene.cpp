@@ -73,6 +73,9 @@ bool HelloWorld::init()
 
 void HelloWorld::GoToGamePlay(cocos2d::Ref *pSender){
 
+    ball_velocity_x = ball_velocity_x_initial;
+    ball_velocity_y = ball_velocity_y_initial;
+
     auto scene = Game::createScene();
 
     Director::getInstance()->pushScene(TransitionFade::create(0.5, scene, Color3B(0,255,255)));

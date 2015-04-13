@@ -9,6 +9,8 @@ public:
     CpuPaddle( cocos2d::Layer *layer );
     void changeVelocity( );
     void Stop( );
+    void again( );
+    void startAgain( );
     
 private:
     cocos2d::Size visibleSize;

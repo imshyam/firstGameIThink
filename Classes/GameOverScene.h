@@ -18,6 +18,7 @@ public:
 
     void GoToGame (Ref *pSender);
     void GoToHome (Ref *pSender);
+    void GoToHS (Ref *pSender);
 
 private:
     cocos2d::PhysicsWorld *sceneWorld;

@@ -26,10 +26,15 @@ public:
     bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
     void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event);
     void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event);
+    void Pause( cocos2d::Ref *pSender );
 
 private:
+    cocos2d::Size visibleSize;
     cocos2d::PhysicsWorld *sceneWorld;
     
+    cocos2d::Label *scoreLabelCpu;
+     cocos2d::Label *scoreLabelUser;
+
     void SetPhysicsWorld( cocos2d::PhysicsWorld *world ) { sceneWorld = world; };
 
     bool onContactBegin( cocos2d::PhysicsContact &contact );
@@ -37,7 +42,9 @@ private:
     Ball *ball;
     UserPaddle *userPaddle;
     CpuPaddle *cpuPaddle;
-    
+
+    int scoreCpu,scoreUser;
+
 };
 
 #endif // __GAME_SCENE_H__
