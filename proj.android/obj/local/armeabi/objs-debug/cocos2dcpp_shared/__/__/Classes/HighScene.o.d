@@ -351,7 +351,7 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/HighScene.o: \
  jni/../../cocos2d/cocos/3d/../deprecated/CCString.h \
  jni/../../cocos2d/cocos/3d/../deprecated/CCNotificationCenter.h \
  jni/../../cocos2d/cocos/3d/../deprecated/CCDeprecated.h \
- jni/../../Classes/HelloWorldScene.h
+ jni/../../Classes/HelloWorldScene.h jni/../../Classes/sqlite3.h
 
 jni/../../Classes/HighScene.h:
 
@@ -1058,3 +1058,5 @@ jni/../../cocos2d/cocos/3d/../deprecated/CCNotificationCenter.h:
 jni/../../cocos2d/cocos/3d/../deprecated/CCDeprecated.h:
 
 jni/../../Classes/HelloWorldScene.h:
+
+jni/../../Classes/sqlite3.h:

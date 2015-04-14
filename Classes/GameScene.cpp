@@ -4,6 +4,7 @@
 #include "PauseScene.h"
 #include "GameOverScene.h"
 #include "Config.h"
+#include "sqlite3.h"
 
 USING_NS_CC;
 cocos2d::PhysicsWorld* m_world;
@@ -148,12 +149,12 @@ bool Game::init()
     __String *tempCpu = __String::createWithFormat( "%i", scoreCpu );
     __String *tempUser = __String::createWithFormat( "%i", scoreUser );
 
-    scoreLabelCpu = Label::createWithTTF(tempCpu->getCString(), "fonts/pixel font.ttf", 400);
+    scoreLabelCpu = Label::createWithTTF(tempCpu->getCString(), "fonts/pixel font.ttf", 200);
     scoreLabelCpu->setColor(Color3B( 19, 79, 92));
     scoreLabelCpu->setPosition(Vec2(visibleSize.width*.10 + origin.x, visibleSize.height*.90 + origin.y));
     this->addChild(scoreLabelCpu,1000);
 
-    scoreLabelUser = Label::createWithTTF(tempUser->getCString(), "fonts/pixel font.ttf", 400);
+    scoreLabelUser = Label::createWithTTF(tempUser->getCString(), "fonts/pixel font.ttf", 200);
     scoreLabelUser->setColor(Color3B( 19, 79, 92));
     scoreLabelUser->setPosition(Vec2(visibleSize.width*.10 + origin.x, visibleSize.height*.10 + origin.y));
     this->addChild(scoreLabelUser,1000);
@@ -165,7 +166,20 @@ bool Game::init()
     auto menu = Menu::create(menu_item_1, NULL);
     menu->setPosition(Point(0, 0));
     this->addChild(menu,1000);
-
+    //game type
+    auto Label = Label::createWithTTF("", "fonts/pixel font.ttf", 50);
+    Label->setColor(Color3B( 19, 79, 92));
+    Label->setPosition(Vec2(visibleSize.width*.95 + origin.x, visibleSize.height*.5 + origin.y));
+    if(gameType == 1){
+        Label->setString("Beginner");
+    }
+    else if(gameType == 2){
+        Label->setString("Intermediate");
+    }
+    else{
+        Label->setString("Pro");
+    }
+    this->addChild(Label);
     //TouchEvents Listener
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
@@ -184,6 +198,8 @@ bool Game::init()
     this->setKeypadEnabled(true);
     return true;
 }
+
+
 void Game::onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event )
 {
     auto scene = Pause::createScene();

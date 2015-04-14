@@ -43,7 +43,6 @@ private:
     UserPaddle *userPaddle;
     CpuPaddle *cpuPaddle;
 
-    int scoreCpu,scoreUser;
 
 };
 

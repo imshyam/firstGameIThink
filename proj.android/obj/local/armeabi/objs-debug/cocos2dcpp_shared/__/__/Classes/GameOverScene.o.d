@@ -354,7 +354,7 @@ obj/local/armeabi/objs-debug/cocos2dcpp_shared/__/__/Classes/GameOverScene.o: \
  jni/../../Classes/GameScene.h jni/../../Classes/Ball.h \
  jni/../../Classes/UserPaddle.h jni/../../Classes/CpuPaddle.h \
  jni/../../Classes/HelloWorldScene.h jni/../../Classes/Config.h \
- jni/../../Classes/HighScene.h
+ jni/../../Classes/HighScene.h jni/../../Classes/sqlite3.h
 
 jni/../../Classes/GameOverScene.h:
 
@@ -1073,3 +1073,5 @@ jni/../../Classes/HelloWorldScene.h:
 jni/../../Classes/Config.h:
 
 jni/../../Classes/HighScene.h:
+
+jni/../../Classes/sqlite3.h:

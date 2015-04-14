@@ -59,6 +59,7 @@ void Level::onKeyReleased( cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Eve
 }
 void Level::GoToGamePlayBe(cocos2d::Ref *pSender){
 
+    gameType = 1;
     ball_velocity_x_initial = 800;
     ball_velocity_y_initial = 700;
     ball_velocity_x = ball_velocity_x_initial;
@@ -70,6 +71,7 @@ void Level::GoToGamePlayBe(cocos2d::Ref *pSender){
 }
 void Level::GoToGamePlayInt(cocos2d::Ref *pSender){
 
+    gameType = 2;
     ball_velocity_x_initial = 900;
     ball_velocity_y_initial = 800;
     cpu_paddle_min_velocity_x = -1100;
@@ -83,6 +85,7 @@ void Level::GoToGamePlayInt(cocos2d::Ref *pSender){
 }
 void Level::GoToGamePlayPro(cocos2d::Ref *pSender){
 
+    gameType = 3;
     ball_velocity_x_initial = 1000;
     ball_velocity_y_initial = 900;
     cpu_paddle_min_velocity_x = -1200;

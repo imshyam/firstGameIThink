@@ -28,8 +28,10 @@ int user_paddle_velocity_max_x = 1000;
 bool userWon = false;
 bool gamePaused = false;
 
-// #define BIRD_FALLING_SPEED 0.0025
-// #define BIRD_FLYING_SPEED 0.00375
-//#define BIRD_FLY_DURATION 0.25
+int gameType=1;
+
+
+int scoreCpu,scoreUser;
+
 
 #endif // __CONFIG_H__

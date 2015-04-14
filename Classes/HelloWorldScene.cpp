@@ -3,6 +3,7 @@
 #include "GameScene.h"
 #include "LevelScene.h"
 #include "HighScene.h"
+#include "sqlite3.h"
 
 USING_NS_CC;
 cocos2d::PhysicsWorld* m_world;
@@ -44,14 +45,6 @@ bool HelloWorld::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    // add background
-    auto sprite = Sprite::create("main.jpg");
-
-    // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
-
 
     //menu
     auto menu_item_1 = MenuItemImage::create("play.png", "playc.png", CC_CALLBACK_1(HelloWorld::GoToGamePlay, this));
@@ -65,6 +58,85 @@ bool HelloWorld::init()
     auto menu = Menu::create(menu_item_1, menu_item_2, menu_item_3, NULL);
     menu->setPosition(Point(0, 0));
     this->addChild(menu);
+
+
+//-----------------------Database-----------------------------------------------------------------------------------
+
+sqlite3 *pDB = NULL; //for database path
+char* errMsg = NULL; //for error message
+std::string sqlstr; //for sql query string
+int result;
+__String dbPath = CCFileUtils::sharedFileUtils()->getWritablePath();
+dbPath.append("firstGameIThink.sqlite");
+result = sqlite3_open(dbPath.getCString(),&pDB);
+if (result != SQLITE_OK)
+    CCLOG("OPENING WRONG, %d, MSG:%s",result,errMsg);
+else 
+    CCLOG("result of db making %d",result);
+
+//creation of table
+result = sqlite3_exec(pDB, "CREATE TABLE SCORES("  \
+         "ID INT PRIMARY KEY     NOT NULL," \
+         "NAME           TEXT    NOT NULL," \
+         "RESULT           TEXT    NOT NULL," \
+         "VALUE          TEXT    NOT NULL);",NULL,NULL,&errMsg);
+if(result != SQLITE_OK)
+    CCLOG("CREATE TABLE FAIL %d, Msg: %s",result,errMsg);
+else 
+    CCLOG("result of table creation %d",result);
+//inseration
+sqlite3_exec(pDB, 
+         "INSERT INTO SCORES (ID,NAME,RESULT,VALUE) "  \
+         "VALUES(1,'Beginner','Never Won','0-5' ); "\
+         "INSERT INTO SCORES (ID,NAME,RESULT,VALUE) "  \
+         "VALUES(2,'Intermediate','Never Won','0-5' ); "\
+         "INSERT INTO SCORES (ID,NAME,RESULT,VALUE) "  \
+         "VALUES(3,'Pro','Never Won','0-5' ); ", NULL, NULL, &errMsg);
+
+if(result != SQLITE_OK)
+    CCLOG("CREATE TABLE FAIL %d, Msg: %s",result,errMsg);
+else 
+    CCLOG("result of inseration %d",result);
+
+// //update
+// char *str = "UPDATE SCORES set VALUE = '4-5' where ID=1; ";
+// sqlite3_exec(pDB, str, NULL, NULL, &errMsg);
+
+// if(result != SQLITE_OK)
+//     CCLOG("CREATE TABLE FAIL %d, Msg: %s",result,errMsg);
+// else 
+//     CCLOG("result of update %d",result);
+
+// //select
+// sqlite3_stmt *ppStmt1;
+// CCString *number;
+// CCString *name;
+// CCString *value;
+// result=sqlite3_prepare_v2(pDB,"select * from SCORES", -1, &ppStmt1, NULL);
+// CCLOG("result of selection %d",result);
+// for (;;) {
+//     CCLOG("inside for");
+//     result = sqlite3_step(ppStmt1);
+//     if (result == SQLITE_DONE){
+//         CCLOG("inside SQLITE_DONE");
+//         break;
+//     }
+//     if (result != SQLITE_ROW) {
+//         CCLOG("error: %s!\n", sqlite3_errmsg(pDB));
+//         break;
+//     }
+//     number=CCString::create((const char*)sqlite3_column_text(ppStmt1, 0));
+//     name=CCString::create((const char*)sqlite3_column_text(ppStmt1, 1));
+//     value=CCString::create((const char*)sqlite3_column_text(ppStmt1, 2));
+//     CCLOG("ID : %s, Name : %s, Value : %s ",number->getCString(),name->getCString(),value->getCString());
+// }
+
+
+
+
+
+//------------------------------------------------------------------------------------------------------------------
+
 
 
     this->setKeypadEnabled(true);
